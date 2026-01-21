@@ -1,0 +1,22 @@
+version: '3'
+services:
+  selenium-hub:
+    platform: linux/amd64
+  chrome:
+    platform: linux/amd64
+  test-automation:
+    volumes:
+      - ${BITBUCKET_CLONE_DIR:-.}/shared-downloads:/shared-downloads
+    environment:
+      - USERNAME_USER
+      - PWD_USER
+      - USERNAME_FASH
+      - PWD_FASH
+      - BASE_URL
+      - BASE_URL_API
+      - BASE_URL_BC_API
+      - TEST_DATA_FILE
+      - DOWNLOAD_DIR=/shared-downloads
+    env_file:
+      - ./.env
+      - ${TEST_DATA_FILE:-"$TEST_DATA_FILE"}

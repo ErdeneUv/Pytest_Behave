@@ -1,0 +1,90 @@
+image: docker:latest
+
+definitions:
+  caches:
+    pip: ~/.cache/pip
+    allure: ~/.allure
+
+pipelines:
+  branches:
+    test:
+      - step: &build-run
+          name: 'Start Docker Services'
+          caches:
+            - pip
+            - allure
+          services:
+            - docker
+          script:
+            - |
+              # Set browser based on repository variables
+              if [[ -z "$DOCKER_HOST" || "${BITBUCKET_BRANCH}" == "test" ]]; then
+                export BROWSER=remote_chrome
+              else
+                export BROWSER=chrome_headless
+              fi
+
+            # Choose the target environment (default to prod)
+            - export ENVIRONMENT=${ENVIRONMENT:-prod}
+            # Map secrets from Bitbucket variables into the unified names expected by your tests
+            - export USERNAME_USER="$USERNAME_USER"
+            - export PWD_USER="$PWD_USER"
+            - export USERNAME_FASH="$USERNAME_FASH"
+            - export PWD_FASH="$PWD_FASH"
+            - export TEST_DATA_FILE="$TEST_DATA_FILE"
+            - export BASE_URL="$BASE_URL"
+            - export BASE_URL_API="$BASE_URL_API"
+            - export BASE_URL_BC_API="$BASE_URL_BC_API"
+            # ensure the host folder exists and is writable for bind mount
+            - mkdir -p "${BITBUCKET_CLONE_DIR:-.}/shared-downloads"
+            - chmod 777 "${BITBUCKET_CLONE_DIR:-.}/shared-downloads" || true
+            # Shared download directory for grid
+            - export DOWNLOAD_DIR=/shared-downloads
+            - mkdir -p ~/.docker
+            - echo "$DOCKER_HUB_CREDENTIALS" > ~/.docker/config.json
+            - chmod 600 ~/.docker/config.json
+            - export DOCKER_BUILDKIT=0
+            # Start up services
+            - docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --timeout 900
+            - docker ps
+            # Run tests and generate Allure reports
+            - export SELENIUM_HUB_URL=http://172.18.0.2:4444/wd/hub
+            - export ENVIRONMENT=${ENVIRONMENT:-staging}
+            - docker-compose exec test-automation xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' behave -t@smoke -f allure -o /allure-results || true
+            # Generate and Copy the Allure report from container to the host workspace
+            - docker-compose exec test-automation allure generate /allure-results -o /app/tests/test-reports
+            - docker cp test-automation:/app/tests/test-reports ./tests/test-results
+            - docker-compose down --timeout 60
+
+            - docker-compose down --remove-orphans --timeout 60
+          artifacts:
+            paths:
+              - tests/test-results/**
+
+      - step: &zip-upload
+          name: 'Generate & Copy Allure Report'
+          script:
+            # Installing zip and unzip
+            - apk update && apk add --no-cache zip unzip
+              # Zip the Allure report directory for upload
+            - cd ./tests/test-results
+            - ls -la
+            - zip -r allure-report.zip .
+            - ZIP_PATH=$(realpath allure-report.zip 2>/dev/null || echo "$(pwd)/allure-report.zip")
+            - echo "Zip file created at:" $ZIP_PATH
+            - cd ../..
+            - cp tests/test-results/allure-report.zip .
+            # Use Bitbucket pipe to upload the ZIP file
+            - pipe: atlassian/bitbucket-upload-file:0.7.4
+              variables:
+                BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+                BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
+                FILENAME: "allure-report.zip"
+                FILE: "tests/test-reports/allure-report.zip"
+
+  schedules:
+    - cron: "0 10 * * 1-5"
+      display_name: "Scheduled Test Run (Weekdays 5am ET)"
+      steps:
+        - step: *build-run
+        - step: *zip-upload

@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# Virtual environments
+venv/
+.env
+.env.*
+!.env.example
+
+# Behave / Test artifacts
+tests/logs/
+tests/screenshots/
+tests/reports/
+rerun.features
+behave-report.html
+
+# Allure
+allure-results/
+allure-report/
+.allure_server.pid
+
+# Downloads
+shared-downloads/
+downloads/
+*.crdownload
+*.part
+*.tmp
+
+# Docker
+docker-compose.override.yml
+*.log
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+*~
+*.swp
