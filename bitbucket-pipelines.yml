@@ -7,7 +7,7 @@ definitions:
 
 pipelines:
   branches:
-    test:
+    main:
       - step: &build-run
           name: 'Start Docker Services'
           caches:
