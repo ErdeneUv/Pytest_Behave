@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Pytest_Behave
-=======
 Test Automation Documentation
 
 Introduction
