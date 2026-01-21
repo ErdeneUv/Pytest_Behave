@@ -1,11 +1,11 @@
-Test Automation Documentation
+### Test Automation Documentation ###
 
 Introduction
 
     
 
 
-### What is this repository for? ###
+## What is this repository for? ##
 
 * Quick summary:
 
@@ -40,12 +40,12 @@ Test key can be found here:
 Please make sure you only change REACT_APP_LOCAL_GOOGLE_RECAPTCHA in react repo's .env file. 
 
 ## To set your local address or change environment to stage, prod
-Go to this repo(brandcycle-test)'s .env file. You want to modify "**ui_url**" variable so it has your local address or prod url. Default local address may differ from yours.
+Copy and paste .env.example file name it based on which environment's it is, such as .env.local. You want to modify "**BASE_URL**" variable so it has your local address or prod url. Default local address may differ from yours.
 
 ### Running tests in headless browser
-To use headless browser edit browser value in .env to 'chrome_headless' or 'safari_headless'.
+To use headless browser edit "**BROWSER**" value in .env to 'chrome_headless' or 'safari_headless'.
 
-Also please change the **passwords** in .env file.
+Also please change the **usernames and passwords** in .env file.
 
 Next make sure these brands are Private in your local:
 1. https://www.greenrow.com
@@ -55,15 +55,48 @@ This brand should be Inactive:
 1. https://www.hawaiianairlines.com
 
 
-## To run tests, use behave commands:
-Run tests and generate allure html reports.
+## To run tests, You can use behave commands or make commands:
+###Run tests and generate allure html reports using make commands
 
-Also if you want to see which tests failed and how, please run these lines
+Runs the default test suite (@smoke) using values from:
+* Shell environment variables (if set)
+* .env file values
+* Makefile fallbacks
+    
+    make run
+
+Override environment, browser, or tags
+  
+    ENVIRONMENT=stage BROWSER=remote_chrome TAGS=@regression make run
+    TAGS=@ui make run
+TAGS should be passed without quotes.
+
+Allure Reports
+
+Generate and serve Allure report
+After running tests (which generate allure-results/):
+
+    make results
+
+This will:
+   * Stop any existing local report server
+   * Generate a fresh report under tests/reports/
+   * Serve it at: http://localhost:5555/
+
+Stop server and clean results
+
+    make results-stop
+
+This stops the local server and removes:
+   * tests/reports/
+   * allure-results/
+
+Running Tests using Behave commands (Optional)
     
     behave -t@smoke -f allure -o allure-results
     allure generate allure-results -o tests/reports
 ### Tags:
-To run specific suite of test, please use following tags. 
+To run specific suite of test, please use following tags
 
 Run smoke tests: Build a link form and api on home page, brands page, tools page against Top 5 brands and a brand from remaining networks
 
@@ -102,8 +135,4 @@ Test doesn't run on Safari browser:
   
     safaridriver --enable
   
-
-
 Although tests are written to wait for the web elements, sometimes they still cause synchronization issues. if persists let me know. 
-
->>>>>>> origin/test
