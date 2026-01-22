@@ -89,10 +89,10 @@ def urls_balancer_edit(t_id,urls):
 
 if __name__ == '__main__':
     #to create a normal tracking link to the destination
-    #long_cohort_a_link = 'https://brandcycle.go2cloud.org/aff_c?offer_id=33&aff_id=29&url=https%3A%2F%2Fadidas.njih.net%2Fc%2F193465%2F264102%2F4270%3FsubId1%3DA{affiliate_id}O{offer_id}TID{transaction_id}%26sharedid%3D{affiliate_id}%26u%3Dhttps%253A%252F%252Fwww.adidas.com%252Fus%252Fultraboost-1.0-fortnite-shoes%252FJQ0717.html%253Fpr%253Dtaxonomy_rr%2526slot%253D1%2526rec%253Dmt&aff_unique3=e6aea3d5-cd09-46c7-b8bb-b3512fc64d86&aff_sub4=cohort_a'
-    short_cohort_a='https://brandcycle.shop/0xyj9'
+    #long_cohort_a_link = 'https://br.go2cloud.org/aff_c?offer_id=33&aff_id=29&url=https%3A%2F%2Fadidas.njih.net%2Fc%2F193465%2F264102%2F4270%3FsubId1%3DA{affiliate_id}O{offer_id}TID{transaction_id}%26sharedid%3D{affiliate_id}%26u%3Dhttps%253A%252F%252Fwww.adidas.com%252Fus%252Fultraboost-1.0-fortnite-shoes%252FJQ0717.html%253Fpr%253Dtaxonomy_rr%2526slot%253D1%2526rec%253Dmt&aff_unique3=e6aea3d5-cd09-46c7-b8bb-b3512fc64d86&aff_sub4=cohort_a'
+    short_cohort_a='https://br.link/0xyj9'
     short_cohort_b= 'https://www.kohls.com/product/prd-6615558/bobs-by-skechers-hands-free-slip-ins-skipper-keep-it-classic-womens-shoes.jsp?prdPV=18&isClearance=false'
-    #long_cohort_b_link = 'https://brandcycle.go2cloud.org/aff_c?offer_id=33&aff_id=29&url=https%3A%2F%2Fadidas.njih.net%2Fc%2F193465%2F264102%2F4270%3FsubId1%3DA{affiliate_id}O{offer_id}TID{transaction_id}%26sharedid%3D{affiliate_id}%26u%3Dhttps%253A%252F%252Fwww.adidas.com%252Fus%252Fultraboost-1.0-fortnite-shoes%252FJQ0717.html%253Fpr%253Dtaxonomy_rr%2526slot%253D1%2526rec%253Dmt&aff_unique3=e6aea3d5-cd09-46c7-b8bb-b3512fc64d86&aff_sub4=cohort_b'
+    #long_cohort_b_link = 'https://br.go2cloud.org/aff_c?offer_id=33&aff_id=29&url=https%3A%2F%2Fadidas.njih.net%2Fc%2F193465%2F264102%2F4270%3FsubId1%3DA{affiliate_id}O{offer_id}TID{transaction_id}%26sharedid%3D{affiliate_id}%26u%3Dhttps%253A%252F%252Fwww.adidas.com%252Fus%252Fultraboost-1.0-fortnite-shoes%252FJQ0717.html%253Fpr%253Dtaxonomy_rr%2526slot%253D1%2526rec%253Dmt&aff_unique3=e6aea3d5-cd09-46c7-b8bb-b3512fc64d86&aff_sub4=cohort_b'
 
     short_start_time = time.time()
     #creating normal joturl link out of cohort_b
