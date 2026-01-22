@@ -192,7 +192,7 @@ def get_homepage_bc_link(username, pwd, access_token, brand_id):
     pwd = os.getenv('PWD_' + pwd)
     endpoint = os.getenv("HOMEPAGE_DEEPLINK")
     final_endpoint = endpoint.replace("1401", str(brand_id))
-    url = "https://brandcycle.net" + final_endpoint
+    url = os.getenv("BASE_URL") + final_endpoint
     verify = get_verify()
     try:
         resp = requests.get(
