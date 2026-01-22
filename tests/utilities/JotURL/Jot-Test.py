@@ -39,21 +39,21 @@ def get_bc_links():
     df.to_excel(file_path, sheet_name='Jot', index=False, engine='openpyxl')
 
     # building  BC links
-    brandcycle_links = []
+    aff_links = []
     for url in product_urls:
         link = build_link(csrf_token_jot, env, username, password, url, 'false').json()['url']
-        brandcycle_links.append(link)
+        aff_links.append(link)
 
     # editing BC links
     cohort_a = []
     cohort_b = []
-    for url in brandcycle_links:
+    for url in aff_links:
         # use jot_cohort_a_standard for real test
         url = url + '&aff_sub4=jot_cohort_a_standard'
         cohort_a.append(url)
     print(f'COHORT_A: {cohort_a}')
 
-    for url in brandcycle_links:
+    for url in aff_links:
         # use jot_cohort_b_deeplink for real test
         url = url + '&aff_sub4=jot_cohort_b_deeplink'
         cohort_b.append(url)
@@ -71,7 +71,7 @@ def get_bc_links():
     print('WRITING TO Excel')
     df.to_excel(file_path, sheet_name='Jot', index=False, engine='openpyxl')
 
-    # logging out from BrandCycle
+    # logging out from platform
     logged_out = logout(env, username, password, logout_token_jot, csrf_token_jot)
 
 
